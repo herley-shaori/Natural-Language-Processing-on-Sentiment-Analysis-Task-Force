@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import javax.xml.parsers.DocumentBuilder;
@@ -247,7 +248,13 @@ public class NLPPreprocessing {
             for(int i=0; i<reviews.size(); i++){
                 final Review review = reviews.get(i);
                 final String kalimat = kumpulanTeks.get(i);
-                review.setTranslatedText(GoogleTranslate.translate(kalimat));
+                Iterator<String> iterSatu = new StringTokenizer(kalimat,".").getTokenList().iterator();
+                String totalKata = "";
+                while (iterSatu.hasNext()) {
+                    String kata = iterSatu.next();
+                    totalKata+=GoogleTranslate.translate(kata)+" ";
+                }
+                review.setTranslatedText(GoogleTranslate.translate(StringUtils.trim(totalKata)));
                 String hasil = mapper.writeValueAsString(review);
                 total += hasil +"\n";
                 if(i>0 && i%100==0){
