@@ -14,7 +14,7 @@ public class Review {
     public static final int POSITIVE=1,NEGATIVE=-1,UNKNOWN=0;
     public static final String positive="POSITIVE",negative="NEGATIVE",unknown="UNKNOWN";
     private String rawText,translatedText,foodPolarity,servicePolarity,pricePolarity,ambiencePolarity;
-    private int foodPolarityInteger, servicePolarityInteger,pricePolarityInteger,ambiencePolarityInteger;
+    private Integer foodPolarityInteger=null, servicePolarityInteger=null,pricePolarityInteger=null,ambiencePolarityInteger=null;
 
     /**
      * @return the rawText
@@ -103,56 +103,56 @@ public class Review {
     /**
      * @return the foodPolarityInteger
      */
-    public int getFoodPolarityInteger() {
+    public Integer getFoodPolarityInteger() {
         return foodPolarityInteger;
     }
 
     /**
      * @param foodPolarityInteger the foodPolarityInteger to set
      */
-    public void setFoodPolarityInteger(int foodPolarityInteger) {
+    public void setFoodPolarityInteger(Integer foodPolarityInteger) {
         this.foodPolarityInteger = foodPolarityInteger;
     }
 
     /**
      * @return the servicePolarityInteger
      */
-    public int getServicePolarityInteger() {
+    public Integer getServicePolarityInteger() {
         return servicePolarityInteger;
     }
 
     /**
      * @param servicePolarityInteger the servicePolarityInteger to set
      */
-    public void setServicePolarityInteger(int servicePolarityInteger) {
+    public void setServicePolarityInteger(Integer servicePolarityInteger) {
         this.servicePolarityInteger = servicePolarityInteger;
     }
 
     /**
      * @return the pricePolarityInteger
      */
-    public int getPricePolarityInteger() {
+    public Integer getPricePolarityInteger() {
         return pricePolarityInteger;
     }
 
     /**
      * @param pricePolarityInteger the pricePolarityInteger to set
      */
-    public void setPricePolarityInteger(int pricePolarityInteger) {
+    public void setPricePolarityInteger(Integer pricePolarityInteger) {
         this.pricePolarityInteger = pricePolarityInteger;
     }
 
     /**
      * @return the ambiencePolarityInteger
      */
-    public int getAmbiencePolarityInteger() {
+    public Integer getAmbiencePolarityInteger() {
         return ambiencePolarityInteger;
     }
 
     /**
      * @param ambiencePolarityInteger the ambiencePolarityInteger to set
      */
-    public void setAmbiencePolarityInteger(int ambiencePolarityInteger) {
+    public void setAmbiencePolarityInteger(Integer ambiencePolarityInteger) {
         this.ambiencePolarityInteger = ambiencePolarityInteger;
     }
     

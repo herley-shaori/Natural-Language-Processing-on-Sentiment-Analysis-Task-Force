@@ -6,20 +6,21 @@ from gensim.models.doc2vec import TaggedDocument
 from gensim.models import Doc2Vec
 
 # # Load Doc2Vec Model
-model2 = Doc2Vec.load('foodAspect.d2v')
-model3 = Doc2Vec.load('priceAspect.d2v')
-model4 = Doc2Vec.load('serviceAspect.d2v')
-model5 = Doc2Vec.load('ambienceAspect.d2v')
+# model2 = Doc2Vec.load('foodAspect.d2v')
+# model3 = Doc2Vec.load('priceAspect.d2v')
+# model4 = Doc2Vec.load('serviceAspect.d2v')
+# model5 = Doc2Vec.load('ambienceAspect.d2v')
+model6 = Doc2Vec.load('food.d2v')
 
 # 0 ~ 3913
-# print("Ukuran Model 2: ", model2[3913]) 
+# print("Ukuran Model 2: ", model6[7000]) 
 
 def testing():
 	testdata = []
 	testLabel = []
 
-	for i in range(3914-50, 3914):
-		testdata.append(model2.docvecs[i])
+	for i in range(5916-50, 5916):
+		testdata.append(model6.docvecs[i])
 
 	from pymongo import MongoClient
 	client = MongoClient('localhost', 27017)
@@ -29,10 +30,18 @@ def testing():
 		testLabel.append({'food':em.get('foodPolarityInteger'),'price':em.get('pricePolarityInteger'),'service':em.get('servicePolarityInteger'),'ambience':em.get('ambiencePolarityInteger')})
 	return testdata,testLabel
 
+def gambitGetter():
+	hasil = []
+	for i in range (2000):
+		prefix = "GAMBIT_"+str(i)
+		hasil.append(model6.docvecs[prefix])
+	return hasil
+
+gambitData = gambitGetter()
 testData,testLabel = testing()
 
-#Perhitungan Elemen
-def jumlahElemen(batas, prefix,kelas, data):
+# Perhitungan Elemen
+def jumlahElemen(batas, prefix,kelas, data=model6):
 	hasilData = []
 	labelnya = []
 	for i in range(batas):
@@ -67,38 +76,38 @@ def allElem(labelPositive,labelNegative,labelUnknown,dataPositive,dataNegative,d
 	return data,labels
 
 # From Mongo.Data
-jumlahFoodPos = 3183
-jumlahFoodNeg = 488
-jumlahFoodUnk = 186
+jumlahFoodPos = 3238
+jumlahFoodNeg = 487
+jumlahFoodUnk = 190
 
-jumlahPricePos = 1059
-jumlahPriceNeg = 400
-jumlahPriceUnk = 2406
+jumlahPricePos = 1069
+jumlahPriceNeg = 407
+jumlahPriceUnk = 2439
 
-jumlahServicePos = 1036
-jumlahServiceNeg = 459
-jumlahServiceUnk = 2370
+jumlahServicePos = 1062
+jumlahServiceNeg = 462
+jumlahServiceUnk = 2391
 
-jumlahAmbiencePos = 1839
-jumlahAmbienceNeg = 383
-jumlahAmbienceUnk = 1643
+jumlahAmbiencePos = 1864
+jumlahAmbienceNeg = 390
+jumlahAmbienceUnk = 1661
 
 # Labelling
-foodPosElem,labelFoodPos = jumlahElemen(jumlahFoodPos,prefix='TRAIN_FOOD_POS_',kelas=1,data=model2)
-foodNegElem,labelFoodNeg = jumlahElemen(jumlahFoodNeg,prefix='TRAIN_FOOD_NEG_',kelas=-1,data=model2)
-foodUnkElem,labelFoodUnk = jumlahElemen(jumlahFoodUnk,prefix='TRAIN_FOOD_UNK_',kelas=0,data=model2)
+foodPosElem,labelFoodPos = jumlahElemen(jumlahFoodPos,prefix='TRAIN_FOOD_POS_',kelas=1)
+foodNegElem,labelFoodNeg = jumlahElemen(jumlahFoodNeg,prefix='TRAIN_FOOD_NEG_',kelas=-1)
+foodUnkElem,labelFoodUnk = jumlahElemen(jumlahFoodUnk,prefix='TRAIN_FOOD_UNK_',kelas=0)
 
-pricePosElem,labelPricePos = jumlahElemen(jumlahPricePos,prefix='TRAIN_PRICE_POS_',kelas=1,data=model3)
-priceNegElem,labelPriceNeg = jumlahElemen(jumlahPriceNeg,prefix='TRAIN_PRICE_NEG_',kelas=-1,data=model3)
-priceUnkElem,labelPriceUnk = jumlahElemen(jumlahPriceUnk,prefix='TRAIN_PRICE_UNK_',kelas=0,data=model3)
+pricePosElem,labelPricePos = jumlahElemen(jumlahPricePos,prefix='TRAIN_PRICE_POS_',kelas=1)
+priceNegElem,labelPriceNeg = jumlahElemen(jumlahPriceNeg,prefix='TRAIN_PRICE_NEG_',kelas=-1)
+priceUnkElem,labelPriceUnk = jumlahElemen(jumlahPriceUnk,prefix='TRAIN_PRICE_UNK_',kelas=0)
 
-servicePosElem,labelServicePos = jumlahElemen(jumlahServicePos,prefix='TRAIN_SERVICE_POS_',kelas=1,data=model4)
-serviceNegElem,labelServiceNeg = jumlahElemen(jumlahServiceNeg,prefix='TRAIN_SERVICE_NEG_',kelas=-1,data=model4)
-serviceUnkElem,labelServiceUnk = jumlahElemen(jumlahServiceUnk,prefix='TRAIN_SERVICE_UNK_',kelas=0,data=model4)
+servicePosElem,labelServicePos = jumlahElemen(jumlahServicePos,prefix='TRAIN_SERVICE_POS_',kelas=1)
+serviceNegElem,labelServiceNeg = jumlahElemen(jumlahServiceNeg,prefix='TRAIN_SERVICE_NEG_',kelas=-1)
+serviceUnkElem,labelServiceUnk = jumlahElemen(jumlahServiceUnk,prefix='TRAIN_SERVICE_UNK_',kelas=0)
 
-ambiencePosElem,labelAmbiencePos = jumlahElemen(jumlahAmbiencePos,prefix='TRAIN_AMBIENCE_POS_',kelas=1,data=model5)
-ambienceNegElem,labelAmbienceNeg = jumlahElemen(jumlahAmbienceNeg,prefix='TRAIN_AMBIENCE_NEG_',kelas=-1,data=model5)
-ambienceUnkElem,labelAmbienceUnk = jumlahElemen(jumlahAmbienceUnk,prefix='TRAIN_AMBIENCE_UNK_',kelas=0,data=model5)
+ambiencePosElem,labelAmbiencePos = jumlahElemen(jumlahAmbiencePos,prefix='TRAIN_AMBIENCE_POS_',kelas=1)
+ambienceNegElem,labelAmbienceNeg = jumlahElemen(jumlahAmbienceNeg,prefix='TRAIN_AMBIENCE_NEG_',kelas=-1)
+ambienceUnkElem,labelAmbienceUnk = jumlahElemen(jumlahAmbienceUnk,prefix='TRAIN_AMBIENCE_UNK_',kelas=0)
 
 foodData,foodLabels = allElem(labelPositive=labelFoodPos,labelNegative=labelFoodNeg,labelUnknown=labelFoodUnk,dataPositive=foodPosElem,dataNegative=foodNegElem,dataUnknown=foodUnkElem)
 
@@ -186,9 +195,7 @@ def DLTester(trainingData,trainingLabel,modelName,aspectName,mode=0):
 
 	for i in range(len(testData)):
 		netesterdata = numpy.array(testData[i]).reshape((1,300))
-
 		hasilPrediksi = None
-
 		if(mode>0):
 			X_train = netesterdata
 			X_train = numpy.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
@@ -215,6 +222,57 @@ def DLTester(trainingData,trainingLabel,modelName,aspectName,mode=0):
 	print("***********************")
 	return nilaiAkurasi,len(nesterNewData)
 
+def predictionDecoder(hasilPrediksi):
+	if((hasilPrediksi[0][0]>hasilPrediksi[0][1]) and (hasilPrediksi[0][0]>hasilPrediksi[0][2])):
+		return 1
+	elif((hasilPrediksi[0][1]>hasilPrediksi[0][0]) and (hasilPrediksi[0][1]>hasilPrediksi[0][2])):
+		return 0
+	elif((hasilPrediksi[0][2]>hasilPrediksi[0][0]) and (hasilPrediksi[0][2]>hasilPrediksi[0][1])):
+		return -1
+
+def gambitPredictor(mode=0):
+	from keras.models import load_model
+	finalResults = []
+	if(mode == 0):
+		modelFood = load_model('foodKerasModel.h5')
+		modelPrice = load_model('priceKerasModel.h5')
+		modelService = load_model('serviceKerasModel.h5')
+		modelAmbience = load_model('ambienceKerasModel.h5')
+
+		for gm in gambitData:
+			foodPred = predictionDecoder(modelFood.predict(numpy.array(gm).reshape((1,300))))
+			pricePred = predictionDecoder(modelPrice.predict(numpy.array(gm).reshape((1,300))))
+			servicePred = predictionDecoder(modelService.predict(numpy.array(gm).reshape((1,300))))
+			ambiencePred = predictionDecoder(modelAmbience.predict(numpy.array(gm).reshape((1,300))))
+			finalResults.append([foodPred,pricePred,servicePred,ambiencePred])
+	else:
+		modelFood = load_model('foodKerasModelLSTM.h5')
+		modelPrice = load_model('priceKerasModelLSTM.h5')
+		modelService = load_model('serviceKerasModelLSTM.h5')
+		modelAmbience = load_model('ambienceKerasModelLSTM.h5')
+
+		for gm in gambitData:
+			netesterdata = numpy.array(gm).reshape((1,300))
+			X_train = netesterdata
+			X_train = numpy.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
+			foodPred = predictionDecoder(modelFood.predict(X_train))
+			pricePred = predictionDecoder(modelPrice.predict(X_train))
+			servicePred = predictionDecoder(modelService.predict(X_train))
+			ambiencePred = predictionDecoder(modelAmbience.predict(X_train))
+			finalResults.append([foodPred,pricePred,servicePred,ambiencePred])
+
+	for dataFinal in finalResults:
+		if(mode == 0):
+			with open('hasilnyaDNN.txt', 'a') as the_file:
+				the_file.write(str(dataFinal)+"\n"+"*****"+"\n")
+		else:
+			with open('hasilnyaLSTM.txt', 'a') as the_file:
+				the_file.write(str(dataFinal)+"\n"+"*****"+"\n")
+	print("Penulisan Selesai")
+	return finalResults
+
+thegambit = gambitPredictor(mode=0)
+
 # DLTrainer(foodData,foodLabels,"FOOD")
 # DLTrainer(priceData,priceLabels,"PRICE")
 # DLTrainer(serviceData,serviceLabels,"SERVICE")
@@ -227,15 +285,15 @@ def DLTester(trainingData,trainingLabel,modelName,aspectName,mode=0):
 # LSTMTrainer(ambienceData,ambienceLabels,"AMBIENCE")
 # print("Results above was trained on LSTM")
 
-#mode=0 DNN, mode=1LSTM
-a1,b1 = DLTester(foodData,foodLabels,'foodKerasModelLSTM.h5', 'FOOD', mode=1)
-a2,b2 = DLTester(priceData,priceLabels,'priceKerasModelLSTM.h5', 'PRICE', mode=1)
-a3,b3 = DLTester(serviceData,serviceLabels,'serviceKerasModelLSTM.h5', 'SERVICE',mode=1)
-a4, b4 = DLTester(ambienceData,ambienceLabels,'ambienceKerasModelLSTM.h5', 'AMBIENCE',mode=1)
-print("Akurasi Semua Aspek dalam LSTM: ", ((a1+a2+a3+a4)/(b1+b2+b3+b4))*100,"%")
-print("###################################")
-a1,b1 = DLTester(foodData,foodLabels,'foodKerasModel.h5', 'FOOD')
-a2,b2 = DLTester(priceData,priceLabels,'priceKerasModel.h5', 'PRICE')
-a3,b3 = DLTester(serviceData,serviceLabels,'serviceKerasModel.h5', 'SERVICE')
-a4, b4 = DLTester(ambienceData,ambienceLabels,'ambienceKerasModel.h5', 'AMBIENCE')
-print("Akurasi Semua Aspek dalam DNN: ", ((a1+a2+a3+a4)/(b1+b2+b3+b4))*100,"%")
+# mode=0 DNN, mode=1LSTM
+# a1,b1 = DLTester(foodData,foodLabels,'foodKerasModelLSTM.h5', 'FOOD', mode=1)
+# a2,b2 = DLTester(priceData,priceLabels,'priceKerasModelLSTM.h5', 'PRICE', mode=1)
+# a3,b3 = DLTester(serviceData,serviceLabels,'serviceKerasModelLSTM.h5', 'SERVICE',mode=1)
+# a4, b4 = DLTester(ambienceData,ambienceLabels,'ambienceKerasModelLSTM.h5', 'AMBIENCE',mode=1)
+# print("Akurasi Semua Aspek dalam LSTM: ", ((a1+a2+a3+a4)/(b1+b2+b3+b4))*100,"%")
+# print("###################################")
+# a1,b1 = DLTester(foodData,foodLabels,'foodKerasModel.h5', 'FOOD')
+# a2,b2 = DLTester(priceData,priceLabels,'priceKerasModel.h5', 'PRICE')
+# a3,b3 = DLTester(serviceData,serviceLabels,'serviceKerasModel.h5', 'SERVICE')
+# a4, b4 = DLTester(ambienceData,ambienceLabels,'ambienceKerasModel.h5', 'AMBIENCE')
+# print("Akurasi Semua Aspek dalam DNN: ", ((a1+a2+a3+a4)/(b1+b2+b3+b4))*100,"%")

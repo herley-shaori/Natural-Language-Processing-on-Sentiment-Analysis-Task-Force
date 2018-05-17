@@ -30,7 +30,7 @@ class TaggedLineSentence(object):
         for source, prefix in self.sources.items():
             with utils.smart_open(source) as fin:
                 for item_no, line in enumerate(fin):
-                    # print("Prefix: ", prefix, " Number: ",item_no)
+                    print("Prefix: ", prefix, " Number: ",item_no)
                     self.sentences.append(TaggedDocument(utils.to_unicode(line,encoding='ISO-8859-1').split(), [prefix + '_%s' % item_no]))
         return(self.sentences)
 
@@ -43,7 +43,8 @@ class TaggedLineSentence(object):
 # sources = {'food-POS.txt':'TRAIN_FOOD_POS', 'food-NEG.txt':'TRAIN_FOOD_NEG', 'food-UNK.txt':'TRAIN_FOOD_UNK'}
 # sources = {'price-POS.txt':'TRAIN_PRICE_POS', 'price-NEG.txt':'TRAIN_PRICE_NEG', 'price-UNK.txt':'TRAIN_PRICE_UNK'}
 # sources = {'service-POS.txt':'TRAIN_SERVICE_POS', 'service-NEG.txt':'TRAIN_SERVICE_NEG', 'service-UNK.txt':'TRAIN_SERVICE_UNK'}
-sources = {'ambience-POS.txt':'TRAIN_AMBIENCE_POS', 'ambience-NEG.txt':'TRAIN_AMBIENCE_NEG', 'ambience-UNK.txt':'TRAIN_AMBIENCE_UNK'}
+#sources = {'ambience-POS.txt':'TRAIN_AMBIENCE_POS', 'ambience-NEG.txt':'TRAIN_AMBIENCE_NEG', 'ambience-UNK.txt':'TRAIN_AMBIENCE_UNK'}
+sources = {'gambit.txt':'GAMBIT','food-POS.txt':'TRAIN_FOOD_POS', 'food-NEG.txt':'TRAIN_FOOD_NEG', 'food-UNK.txt':'TRAIN_FOOD_UNK','price-POS.txt':'TRAIN_PRICE_POS', 'price-NEG.txt':'TRAIN_PRICE_NEG', 'price-UNK.txt':'TRAIN_PRICE_UNK','service-POS.txt':'TRAIN_SERVICE_POS', 'service-NEG.txt':'TRAIN_SERVICE_NEG', 'service-UNK.txt':'TRAIN_SERVICE_UNK','ambience-POS.txt':'TRAIN_AMBIENCE_POS', 'ambience-NEG.txt':'TRAIN_AMBIENCE_NEG', 'ambience-UNK.txt':'TRAIN_AMBIENCE_UNK'}
 
 # log.info('TaggedDocument')
 sentences = TaggedLineSentence(sources)
@@ -63,4 +64,5 @@ print("Model Similar with Food: ", model.most_similar('food'))
 # model.save('foodAspect.d2v')
 # model.save('priceAspect.d2v')
 # model.save('serviceAspect.d2v')
-model.save('ambienceAspect.d2v')
+# model.save('ambienceAspect.d2v')
+model.save('food.d2v')
